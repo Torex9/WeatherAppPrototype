@@ -204,6 +204,7 @@ class MainActivity : ComponentActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "Hello")
+                //Text(text = "${currentLocation.lat}/${currentLocation.lng}")
             }
 
         }
