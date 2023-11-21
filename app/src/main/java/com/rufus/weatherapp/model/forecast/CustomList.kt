@@ -2,13 +2,14 @@ package com.rufus.weatherapp.model.forecast
 
 import com.google.gson.annotations.SerializedName
 import com.rufus.weatherapp.model.weather.Clouds
+import com.rufus.weatherapp.model.weather.Main
 import com.rufus.weatherapp.model.weather.Sys
 import com.rufus.weatherapp.model.weather.Weather
 import com.rufus.weatherapp.model.weather.Wind
 
 data class CustomList (
     @SerializedName("dt") var dt: Int? = null,
-    @SerializedName("main") var main: Int? = null,
+    @SerializedName("main") var main: Main? = Main(),
     @SerializedName("weather") var weather: ArrayList<Weather>? = arrayListOf(),
     @SerializedName("clouds") var clouds: Clouds? = Clouds(),
     @SerializedName("wind") var wind: Wind? = Wind(),

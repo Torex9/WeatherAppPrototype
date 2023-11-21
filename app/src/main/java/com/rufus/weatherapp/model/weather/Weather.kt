@@ -8,7 +8,7 @@ data class Weather (
     @SerializedName("main")
     var main: String? = null,
     @SerializedName("description")
-    var description: Int? = null,
+    var description: String? = null,
     @SerializedName("icon")
-    var icon: Int? = null
+    var icon: String? = null
 )

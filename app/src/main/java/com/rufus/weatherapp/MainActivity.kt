@@ -33,11 +33,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -52,6 +50,7 @@ import com.rufus.weatherapp.constant.Const.Companion.colorBg1
 import com.rufus.weatherapp.constant.Const.Companion.colorBg2
 import com.rufus.weatherapp.constant.Const.Companion.permissions
 import com.rufus.weatherapp.model.MyLatLng
+import com.rufus.weatherapp.model.forecast.ForecastResult
 import com.rufus.weatherapp.model.weather.WeatherResult
 import com.rufus.weatherapp.ui.theme.WeatherAppTheme
 import com.rufus.weatherapp.viewmodel.MainViewModel
@@ -123,6 +122,9 @@ class MainActivity : ComponentActivity() {
                             location.longitude
                         )
                     }
+
+                    //Fetch Api when location changes
+                    fetchWeatherInformation(mainViewModel, currentLocation)
                 }
 
             }
@@ -137,6 +139,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun fetchWeatherInformation(mainViewModel: MainViewModel, currentLocation: MyLatLng) {
+        mainViewModel.state = STATE.LOADING
+        mainViewModel.getWeatherByLocation(currentLocation)
+        mainViewModel.getForecastByLocation(currentLocation)
+        mainViewModel.state = STATE.SUCCESS
     }
 
     private fun initViewModel() {
@@ -229,9 +238,21 @@ class MainActivity : ComponentActivity() {
                 else {
                     //*Creating two sections Corresponding to Weather and forecast*
                     WeatherSection(mainViewModel.weatherResponse)
+                    ForecastSection(mainViewModel.forecastResponse)
                 }
             }
 
+        }
+    }
+
+    @Composable
+    fun ForecastSection(forecastResponse: ForecastResult) {
+        return Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = forecastResponse.toString())
         }
     }
 
@@ -242,7 +263,7 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            
+            Text(text = weatherResponse.toString())
         }
     }
 
