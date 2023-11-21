@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,6 +40,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -50,12 +52,16 @@ import com.rufus.weatherapp.constant.Const.Companion.colorBg1
 import com.rufus.weatherapp.constant.Const.Companion.colorBg2
 import com.rufus.weatherapp.constant.Const.Companion.permissions
 import com.rufus.weatherapp.model.MyLatLng
+import com.rufus.weatherapp.model.weather.WeatherResult
 import com.rufus.weatherapp.ui.theme.WeatherAppTheme
+import com.rufus.weatherapp.viewmodel.MainViewModel
+import com.rufus.weatherapp.viewmodel.STATE
 import kotlinx.coroutines.coroutineScope
 
 class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    private lateinit var mainViewModel: MainViewModel
     private var locationRequired: Boolean = false
 
     override fun onResume() {
@@ -94,7 +100,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         initlocationClient()
+        initViewModel()
+
+
         setContent {
 
             //This will Keep the value of the current location
@@ -126,6 +137,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun initViewModel() {
+        mainViewModel = ViewModelProvider(this@MainActivity)[MainViewModel::class.java]
     }
 
     @Composable
@@ -203,10 +218,52 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Hello")
+                //Text(text = "Hello")
                 //Text(text = "${currentLocation.lat}/${currentLocation.lng}")
+                if(mainViewModel.state == STATE.LOADING) {
+                    LoadingSection()
+                }
+                else if(mainViewModel.state == STATE.FAILED) {
+                    ErrorSection(mainViewModel.errorMessage)
+                }
+                else {
+                    //*Creating two sections Corresponding to Weather and forecast*
+                    WeatherSection(mainViewModel.weatherResponse)
+                }
             }
 
+        }
+    }
+
+    @Composable
+    fun WeatherSection(weatherResponse: WeatherResult) {
+        return Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            
+        }
+    }
+
+    @Composable
+    fun ErrorSection(errorMessage: String) {
+        return Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = errorMessage, color = Color.White)
+        }
+    }
+    @Composable
+    fun LoadingSection() {
+        return Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+           CircularProgressIndicator(color = Color.White)
         }
     }
 
