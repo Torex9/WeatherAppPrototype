@@ -1,5 +1,6 @@
 package com.rufus.weatherapp.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -42,6 +43,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun getForecastByLocation(latLng: MyLatLng) {
+        Log.d("RUFUSDEV", "Call API HERE!!!!!!!!!")
         viewModelScope.launch {
             state = STATE.LOADING
             val apiService = RetrofitClient.getInstace()

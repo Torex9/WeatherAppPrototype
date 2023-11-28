@@ -11,7 +11,7 @@ interface IApiService {
     suspend fun getWeather(
         @Query("lat") lat: Double = 0.0,
         @Query("lon") lng: Double = 0.0,
-        @Query("units") units: String = "metrics",
+        @Query("units") units: String = "metric",
         @Query("appid") appId: String = openWeatherMapApiKey
     ): WeatherResult
 
@@ -19,7 +19,7 @@ interface IApiService {
     suspend fun getForecast(
         @Query("lat") lat: Double = 0.0,
         @Query("lon") lng: Double = 0.0,
-        @Query("units") units: String = "metrics",
+        @Query("units") units: String = "metric",
         @Query("appid") appId: String = openWeatherMapApiKey
     ): ForecastResult
 }
