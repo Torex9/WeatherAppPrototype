@@ -189,7 +189,10 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(key1 = currentLocation, block = {
             coroutineScope {
                 if (permissions.all {
-                    ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+                    ContextCompat.checkSelfPermission(
+                        context,
+                        it
+                    ) == PackageManager.PERMISSION_GRANTED
                     }) {
                     //if all permission accepted
                     startLocationUpdate()
@@ -200,7 +203,9 @@ class MainActivity : ComponentActivity() {
             }
         })
 
-        
+        LaunchedEffect(key1 = true, block = {
+            fetchWeatherInformation(mainViewModel, currentLocation)
+        })
 
         val gradient = Brush.linearGradient(
             colors = listOf(Color(colorBg1) , Color(colorBg2)),

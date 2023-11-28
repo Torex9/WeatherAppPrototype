@@ -77,7 +77,8 @@ fun ForecastTile(temp: String, image: String, time: String) {
             .padding(20.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color(cardColor).copy(alpha = 0.7f),
+            //containerColor = Color(cardColor).copy(alpha = 0.7f),
+            containerColor = Color(0xFF102840),
             contentColor = Color.White
         )
     ) {
@@ -93,6 +94,7 @@ fun ForecastTile(temp: String, image: String, time: String) {
                     .width(50.dp)
                     .height(50.dp),
                 contentScale = ContentScale.FillBounds
+
             )
             Text(text = time.ifEmpty { NA }, color = Color.White)
         }
