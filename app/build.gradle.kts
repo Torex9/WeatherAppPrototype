@@ -83,6 +83,9 @@ dependencies {
     implementation ("com.github.Gurupreet:FontAwesomeCompose:1.0.0")
     //Full layout with Status bar
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.33.1-alpha")
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.7.5")
 }
 
 

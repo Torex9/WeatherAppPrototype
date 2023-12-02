@@ -43,7 +43,7 @@ fun WeatherSection(weatherResponse: WeatherResult) {
     }
     else {
         weatherResponse.coord?.let{
-            title = "${it.lat}/${it.lon}}"
+            title = "${it.lat}/${it.lon}"
         }
     }
 

@@ -6,16 +6,21 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
 import android.widget.Toast
+import android.window.SplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Animatable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -42,9 +47,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -64,6 +76,7 @@ import com.rufus.weatherapp.view.WeatherSection
 import com.rufus.weatherapp.viewmodel.MainViewModel
 import com.rufus.weatherapp.viewmodel.STATE
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -133,8 +146,9 @@ class MainActivity : ComponentActivity() {
                 }
 
             }
+            navigation(currentLocation)
 
-            WeatherAppTheme {
+            /*WeatherAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -142,9 +156,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     LocationScreen(this@MainActivity, currentLocation)
                 }
-            }
+            } */
         }
     }
+
+
 
     private fun fetchWeatherInformation(mainViewModel: MainViewModel, currentLocation: MyLatLng) {
         mainViewModel.state = STATE.LOADING
@@ -171,9 +187,9 @@ class MainActivity : ComponentActivity() {
             if(areGranted) {
                 locationRequired = true;
                 startLocationUpdate();
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Location Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Location Permission Denied, Enable permission in Settings", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -298,4 +314,49 @@ class MainActivity : ComponentActivity() {
         fusedLocationProviderClient = LocationServices
             .getFusedLocationProviderClient(this)
     }
+
+
+    //navigation from splash screen to main page
+    @Composable
+    fun navigation(currentLocation: MyLatLng) {
+        var navController = rememberNavController()
+        NavHost(
+            navController = navController,
+            startDestination = "splash_screen"
+        ){
+            composable("splash_screen") {
+                SplashScreen(navController = navController)
+            }
+
+            composable("main_screen") {
+                LocationScreen(this@MainActivity, currentLocation)
+            }
+        }
+    }
+
+
+    //splash screen
+    @Composable
+    fun SplashScreen(navController: NavController) {
+        val scale = remember{ androidx.compose.animation.core.Animatable(0f) }
+        LaunchedEffect(key1 = true) {
+            delay(3000L)
+            navController.navigate("main_screen")
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "RUFUS WEATHER APP")
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                "",
+                modifier = Modifier
+                    .width(400.dp)
+                    .height(900.dp)
+            )
+        }
+    }
 }
+

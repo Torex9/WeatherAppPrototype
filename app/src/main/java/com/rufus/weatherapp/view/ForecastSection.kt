@@ -92,8 +92,8 @@ fun ForecastTile(temp: String, image: String, time: String) {
             AsyncImage(
                 model = image, contentDescription = image,
                 modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp),
+                    .width(100.dp)
+                    .height(100.dp),
                 contentScale = ContentScale.FillBounds
 
             )
