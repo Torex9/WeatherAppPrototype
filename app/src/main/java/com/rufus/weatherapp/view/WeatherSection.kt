@@ -82,7 +82,7 @@ fun WeatherSection(weatherResponse: WeatherResult) {
      */
     var clouds = ""
     weatherResponse.clouds.let {
-        clouds = if (it == null) LOADING else "${it.all}"
+        clouds = if (it == null) LOADING else " ${it.all} %"
     }
 
     /*
