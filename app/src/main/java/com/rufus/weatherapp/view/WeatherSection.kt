@@ -145,6 +145,6 @@ fun WeatherTitleSection(text: String, subText: String, fontSize: TextUnit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text, fontSize = fontSize, color = Color.White, fontWeight = FontWeight.Bold)
-        Text(subText, fontSize = 14.sp, color = Color.White)
+        Text(subText, fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
     }
 }
